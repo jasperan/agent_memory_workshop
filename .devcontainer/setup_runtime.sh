@@ -11,6 +11,18 @@ python3 -c "import oracledb" > /dev/null 2>&1 || {
   pip install -q oracledb
 }
 
+# --- Ollama: start server and begin model pull ---
+echo ""
+echo "[0/3] Starting Ollama server..."
+ollama serve > /dev/null 2>&1 &
+for i in $(seq 1 10); do
+  curl -sf http://localhost:11434 > /dev/null 2>&1 && echo "  Ollama is ready." && break \
+    || { [ $i -lt 10 ] && echo "  Waiting for Ollama... (attempt $i/10)" && sleep 2; }
+done
+echo "  Pulling qwen3:1.7b in background..."
+ollama pull qwen3:1.7b > /dev/null 2>&1 &
+PULL_PID=$!
+
 # --- Step 1: Wait for Docker daemon ---
 echo ""
 echo "[1/3] Waiting for Docker daemon..."
@@ -177,6 +189,14 @@ if [ $? -ne 0 ]; then
   echo "  Aborting because notebook user VECTOR is not ready."
   exit 1
 fi
+
+# --- Wait for Ollama model pull to complete ---
+echo ""
+echo "  Waiting for Ollama model pull to finish..."
+wait $PULL_PID
+ollama list | grep qwen3:1.7b > /dev/null 2>&1 \
+  && echo "  qwen3:1.7b model verified." \
+  || echo "  WARNING: qwen3:1.7b model not found in ollama list."
 
 echo ""
 echo "============================================"

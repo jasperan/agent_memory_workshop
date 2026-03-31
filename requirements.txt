@@ -1,7 +1,6 @@
 langchain-oracledb
 langchain-community
 langchain-huggingface
-langchain-openai
 langchain
 sentence-transformers
 oracledb
@@ -12,5 +11,5 @@ jupyter
 ipykernel
 ipywidgets
 matplotlib
-tiktoken
+requests
 pydantic

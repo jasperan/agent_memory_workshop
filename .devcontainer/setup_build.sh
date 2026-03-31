@@ -6,12 +6,15 @@ echo "  Oracle Agent Memory Workshop - Build"
 echo "============================================"
 
 echo ""
-echo "[1/2] Installing Python dependencies..."
+echo "[1/3] Installing Ollama..."
+curl -fsSL https://ollama.com/install.sh | sh
+
+echo ""
+echo "[2/3] Installing Python dependencies..."
 pip install -q --no-cache-dir \
   langchain-oracledb \
   langchain-community \
   langchain-huggingface \
-  langchain-openai \
   langchain \
   sentence-transformers \
   oracledb \
@@ -22,11 +25,11 @@ pip install -q --no-cache-dir \
   ipykernel \
   ipywidgets \
   matplotlib \
-  tiktoken \
+  requests \
   pydantic
 
 echo ""
-echo "[2/2] Registering Jupyter kernel..."
+echo "[3/3] Registering Jupyter kernel..."
 python -m ipykernel install --user --name workshop --display-name "Oracle Agent Memory Workshop"
 
 echo ""

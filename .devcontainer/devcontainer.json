@@ -42,7 +42,7 @@
     "ORACLE_DSN": "localhost:1521/FREEPDB1",
     "ORACLE_USER": "VECTOR",
     "ORACLE_PASSWORD": "VectorPwd_2025",
-    "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}",
+    "OLLAMA_HOST": "http://localhost:11434",
     "TAVILY_API_KEY": "${localEnv:TAVILY_API_KEY}"
   }
 }
