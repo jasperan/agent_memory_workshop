@@ -128,20 +128,45 @@ Then reload the VS Code window (`Cmd/Ctrl + Shift + P` → `Developer: Reload Wi
 
 ---
 
-### API key not found / `OPENAI_API_KEY` is None
+### Ollama not responding
 
-**Symptom:** A cell fails because `os.environ.get("OPENAI_API_KEY")` returns `None`.
+**Symptom:** The Ollama health check cell fails with a connection error.
 
-**Cause:** The Codespaces secret was added after this Codespace was created, so it was not injected at startup.
+**Cause:** The Ollama server is not running.
 
-**Fix:** Stop the Codespace and create a new one. Secrets are only injected at creation time. Alternatively, set the key manually for this session only:
+**Fix:** Start it manually:
 
-```python
-import os
-os.environ["OPENAI_API_KEY"] = "sk-..."  # paste your key here
+```bash
+ollama serve &
 ```
 
-Do not commit this to git.
+Wait 5 seconds, then re-run the health check cell.
+
+---
+
+### Qwen3 model not found
+
+**Symptom:** The health check passes but says `qwen3:1.7b` is not in the model list.
+
+**Cause:** The model pull during setup did not complete.
+
+**Fix:**
+
+```bash
+ollama pull qwen3:1.7b
+```
+
+This downloads ~1.2GB. Wait for it to finish, then re-run the health check cell.
+
+---
+
+### LLM responses are slow
+
+**Symptom:** The agent takes 30+ seconds per response.
+
+**Cause:** Qwen3-1.7B runs on CPU at 10-35 tokens/second. Complex tool-calling turns with multiple iterations will take longer.
+
+**Fix:** This is expected for CPU inference. Each agent turn involves multiple LLM calls (tool selection, execution, response generation). A full 6-question sequence may take 5-10 minutes.
 
 ---
 
@@ -170,7 +195,7 @@ Then restart the kernel (`Kernel` → `Restart Kernel`) and re-run the cell.
 **Fix:** Confirm you are using the `Oracle Agent Memory Workshop` kernel (shown in the top right of the notebook). Then run:
 
 ```bash
-pip install -q langchain-oracledb langchain-huggingface langchain-openai
+pip install -q langchain-oracledb langchain-huggingface openai
 ```
 
 ---
@@ -214,7 +239,13 @@ If something is not working and you are not sure where the problem is, run this 
 import oracledb, os
 
 print("=== Environment ===")
-print("OPENAI_API_KEY:", "SET" if os.environ.get("OPENAI_API_KEY") else "NOT SET")
+import requests
+try:
+    resp = requests.get("http://localhost:11434/api/tags", timeout=3)
+    models = [m["name"] for m in resp.json().get("models", [])]
+    print("Ollama:", "RUNNING" if resp.ok else "NOT RESPONDING", f"Models: {models}")
+except Exception:
+    print("Ollama: NOT RUNNING")
 print("TAVILY_API_KEY:", "SET" if os.environ.get("TAVILY_API_KEY") else "NOT SET")
 
 print("\n=== Oracle Connection ===")

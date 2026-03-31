@@ -17,11 +17,7 @@ Every model has a token limit. Think of it as a budget:
 
 | Model | Token limit |
 |---|---|
-| GPT-5 | 128,000 |
-| GPT-5-mini | 128,000 |
-| GPT-4-turbo | 128,000 |
-| GPT-4 | 8,192 |
-| GPT-3.5-turbo | 16,385 |
+| Qwen3-1.7B (workshop default) | 32,768 |
 
 Your context on each call consumes some of that budget across:
 - System prompt
@@ -41,10 +37,10 @@ This function estimates how much of the context budget is used and returns a per
 **Complete solution:**
 
 ```python
-def calculate_context_usage(context: str, model: str = "gpt-5") -> dict:
+def calculate_context_usage(context: str, model: str = "qwen3:1.7b") -> dict:
     """Calculate context window usage as a percentage."""
     estimated_tokens = len(context) // 4
-    max_tokens = MODEL_TOKEN_LIMITS.get(model, 128000)
+    max_tokens = MODEL_TOKEN_LIMITS.get(model, 32768)
     percentage = (estimated_tokens / max_tokens) * 100
     return {"tokens": estimated_tokens, "max": max_tokens, "percent": round(percentage, 1)}
 ```
@@ -54,7 +50,7 @@ def calculate_context_usage(context: str, model: str = "gpt-5") -> dict:
 **Usage in the agent harness:**
 
 ```python
-usage = calculate_context_usage(current_context, model="gpt-5")
+usage = calculate_context_usage(current_context, model="qwen3:1.7b")
 if usage["percent"] > 80:
     # Trigger summarisation before the next LLM call
     context, summaries = offload_to_summary(context, memory_manager, llm_client)
@@ -91,7 +87,7 @@ The plotting cell at the end of Part 6 shows context window usage across agent i
 
 **`calculate_context_usage` returns `None`** — Your function is missing the `return` statement. Make sure you return the dict.
 
-**`KeyError` on `MODEL_TOKEN_LIMITS`** — Check the model name string. The dict uses specific keys like `"gpt-5"`. The function defaults to 128,000 for unknown models, so this should not raise — check if you accidentally removed the `.get()` default.
+**`KeyError` on `MODEL_TOKEN_LIMITS`** — Check the model name string. The dict uses specific keys like `"qwen3:1.7b"`. The function defaults to 32,768 for unknown models, so this should not raise — check if you accidentally removed the `.get()` default.
 
 ---
 

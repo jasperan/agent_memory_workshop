@@ -67,7 +67,8 @@ A **Research Paper Assistant** — an AI agent that searches, retrieves, and rea
 
 You will need:
 - A GitHub account (free)
-- API keys (`OPENAI_API_KEY` and `TAVILY_API_KEY`) are pre-configured as Codespace environment variables — no manual setup required
+- A `TAVILY_API_KEY` for web search — pre-configured as a Codespace environment variable
+- The LLM (Qwen3-1.7B) runs locally via Ollama — no cloud API key needed
 
 > **Note:** On subsequent Codespace opens, Oracle should start automatically via `postStartCommand`. If you ever see a connection error in the notebook, run step 3 above again from the terminal.
 
@@ -115,7 +116,7 @@ agent-memory-workshop/
 - Oracle AI Database via `gvenzl/oracle-free`
 - `langchain-oracledb` — LangChain integration for Oracle vector store
 - `sentence-transformers` — local embedding model, no API key needed
-- `langchain-openai` — OpenAI LLM integration
+- `ollama` + `openai` SDK — local LLM inference (Qwen3-1.7B) via OpenAI-compatible API
 - `tavily-python` — web search for agents
 - `oracledb` — Python Oracle driver
 
