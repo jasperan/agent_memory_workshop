@@ -1,0 +1,17 @@
+.agents/
+.claude/
+.factory/
+.serena/
+.crush/
+.openhands/
+.playwright-mcp/
+docs/plans/
+dogfood-output/
+task_plan.md
+findings.md
+progress.md
+content/
+oci_genai_example.py
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
