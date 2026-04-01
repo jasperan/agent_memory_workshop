@@ -78,8 +78,6 @@ def tool_result(preview, is_error=False):
 def llm_response(text, label="LLM Response"):
     """Purple block for LLM/agent responses."""
     text = str(text)
-    if len(text) > 1000:
-        text = text[:1000] + "\n..."
     text = text.replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
     _html(
         f'<div style="background:#1a1025;border-left:3px solid {_COLORS["purple"]};padding:8px 12px;margin:6px 0;border-radius:0 4px 4px 0">'
