@@ -21,7 +21,7 @@
   "onCreateCommand": "bash .devcontainer/setup_build.sh",
   "postCreateCommand": "bash .devcontainer/setup_runtime.sh",
   "postStartCommand": "bash .devcontainer/start_oracle.sh",
-  "postAttachCommand": "code README.md workshop/notebook_student.ipynb docs/part-1-oracle-setup.md docs/part-2-vector-search.md",
+  "postAttachCommand": "code README.md workshop/notebook_complete.ipynb docs/part-1-oracle-setup.md docs/part-2-vector-search.md",
 
   "customizations": {
     "vscode": {

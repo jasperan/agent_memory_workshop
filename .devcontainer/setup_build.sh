@@ -7,6 +7,7 @@ echo "============================================"
 
 echo ""
 echo "[1/3] Installing Ollama..."
+sudo apt-get update -qq && sudo apt-get install -y -qq zstd > /dev/null 2>&1
 curl -fsSL https://ollama.com/install.sh | sh
 
 echo ""

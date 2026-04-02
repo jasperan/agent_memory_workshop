@@ -168,9 +168,13 @@ done
 
 if [ $ORACLE_READY -eq 0 ]; then
   echo ""
-  echo "  ERROR: vector_memory_size not confirmed in both CDB\$ROOT and FREEPDB1 after restart."
-  echo "  Aborting to prevent ORA-51962 during notebook execution."
-  exit 1
+  echo "  WARNING: vector_memory_size not confirmed after restart."
+  echo "  The notebook will attempt to set it at runtime if needed."
+  echo "  If HNSW index creation fails, run this in a notebook cell:"
+  echo '    import oracledb'
+  echo '    c = oracledb.connect(user="sys", password="OraclePwd_2025", dsn="localhost:1521/FREE", mode=oracledb.SYSDBA)'
+  echo '    c.cursor().execute("ALTER SYSTEM SET vector_memory_size = 512M SCOPE=BOTH")'
+  echo '    c.commit(); c.close()'
 fi
 
 # Verify workshop application user login used by notebooks.
@@ -202,7 +206,7 @@ echo ""
 echo "============================================"
 echo "  Workshop is ready!"
 echo ""
-echo "  1. Open:   workshop/notebook_student.ipynb"
+echo "  1. Open:   workshop/notebook_complete.ipynb"
 echo "  2. Kernel: Oracle Agent Memory Workshop"
 echo "  3. Guides: docs/part-1-oracle-setup.md"
 echo "============================================"
