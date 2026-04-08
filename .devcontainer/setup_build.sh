@@ -6,12 +6,7 @@ echo "  Oracle Agent Memory Workshop - Build"
 echo "============================================"
 
 echo ""
-echo "[1/3] Installing Ollama..."
-sudo apt-get update -qq && sudo apt-get install -y -qq zstd > /dev/null 2>&1
-curl -fsSL https://ollama.com/install.sh | sh
-
-echo ""
-echo "[2/3] Installing Python dependencies..."
+echo "[1/2] Installing Python dependencies..."
 # Install CPU-only PyTorch first to prevent sentence-transformers
 # from pulling in CUDA libs (~5GB) that blow out Codespaces disk.
 pip install -q --no-cache-dir \
@@ -36,7 +31,7 @@ pip install -q --no-cache-dir \
   pydantic
 
 echo ""
-echo "[3/3] Registering Jupyter kernel..."
+echo "[2/2] Registering Jupyter kernel..."
 python -m ipykernel install --user --name workshop --display-name "Oracle Agent Memory Workshop"
 
 echo ""

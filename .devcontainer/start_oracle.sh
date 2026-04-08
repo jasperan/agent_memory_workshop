@@ -1,15 +1,5 @@
 #!/bin/bash
 
-# --- Ensure Ollama is running ---
-if ! curl -sf http://localhost:11434 > /dev/null 2>&1; then
-  echo "[ollama] Starting Ollama server..."
-  ollama serve > /dev/null 2>&1 &
-  for i in $(seq 1 10); do
-    curl -sf http://localhost:11434 > /dev/null 2>&1 && echo "[ollama] Ollama is ready." && break \
-      || { [ $i -lt 10 ] && sleep 2; }
-  done
-fi
-
 echo "[oracle] Waiting for Docker daemon to be ready..."
 for i in $(seq 1 15); do
   docker info > /dev/null 2>&1 && echo "[oracle] Docker is ready." && break \
