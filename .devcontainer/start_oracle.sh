@@ -1,9 +1,17 @@
 #!/bin/bash
 
-echo "[oracle] Waiting for Docker daemon to be ready..."
-for i in $(seq 1 15); do
+# Skip on first create — setup_runtime.sh already started Oracle.
+if [ -f /tmp/.oracle_setup_done ]; then
+  echo "[oracle] First-create setup already ran. Checking Oracle state..."
+  rm -f /tmp/.oracle_setup_done
+else
+  echo "[oracle] Container restart detected. Starting Oracle..."
+fi
+
+echo "[oracle] Waiting for Docker daemon..."
+for i in $(seq 1 10); do
   docker info > /dev/null 2>&1 && echo "[oracle] Docker is ready." && break \
-    || { [ $i -lt 15 ] && sleep 3; }
+    || { [ $i -lt 10 ] && sleep 2; }
 done
 
 echo "[oracle] Starting Oracle AI Database..."
@@ -11,7 +19,7 @@ docker compose -f .devcontainer/docker-compose.yml start oracle 2>/dev/null \
   || docker compose -f .devcontainer/docker-compose.yml up -d oracle
 
 echo "[oracle] Waiting for Oracle to accept connections..."
-for i in $(seq 1 30); do
+for i in $(seq 1 15); do
   python3 -c "
 import oracledb, sys
 try:
@@ -20,7 +28,7 @@ try:
     sys.exit(0)
 except:
     sys.exit(1)
-" && break || sleep 10
+" && break || sleep 5
 done
 
 # Check actual Vector Memory Area allocation in SGA (not just the parameter value).
@@ -77,8 +85,8 @@ if result.returncode != 0:
     sys.exit(1)
 
 print("[oracle] Waiting for Oracle to restart with VMA allocated...")
-for attempt in range(1, 31):
-    time.sleep(10)
+for attempt in range(1, 16):
+    time.sleep(5)
     try:
         conn = connect_sysdba()
         actual_vma = get_vector_memory(conn)

@@ -10,8 +10,7 @@ echo "[1/2] Installing Python dependencies..."
 # Install CPU-only PyTorch first to prevent sentence-transformers
 # from pulling in CUDA libs (~5GB) that blow out Codespaces disk.
 pip install -q --no-cache-dir \
-  torch torchvision torchaudio \
-  --index-url https://download.pytorch.org/whl/cpu
+  torch --index-url https://download.pytorch.org/whl/cpu
 
 pip install -q --no-cache-dir \
   langchain-oracledb \

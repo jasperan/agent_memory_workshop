@@ -182,6 +182,9 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# Signal to start_oracle.sh that first-create setup already ran.
+touch /tmp/.oracle_setup_done
+
 echo ""
 echo "============================================"
 echo "  Workshop is ready!"
