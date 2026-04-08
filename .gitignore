@@ -15,3 +15,4 @@ oci_genai_example.py
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+.omc/
